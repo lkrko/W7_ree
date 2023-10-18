@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>🍬Candy Crush🍬</title>
+    <style type="text/css">
+        @font-face {
+            font-family: 'CWDangamAsac-Bold';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/CWDangamAsac-Bold.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body { background: #FF00B7; margin: 0;}
+        .link:hover { cursor : url(cursor.png) 20 30, auto;}
+        .candy { position: absolute; left: 0; top: 0; }
+        #poetText { z-index: 9; position: absolute; left: 30px; top: 30px; font-size: 5rem; font-family: 'CWDangamAsac-Bold', serif; font-weight: 700; color: #ffffff; line-height: 5.5rem; text-align: left; }
+        .word { opacity: 0; animation: zoomIn 0.8s forwards; }
+
+        #timer { position: absolute; right: 30px; top: 30px; font-size: 1.4rem; color: #ffffff; }
+        #score { position: absolute; right: 30px; top: 60px; font-size: 1.4rem; color: #ffffff; }
+
+        @keyframes zoomIn {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="poetText"></div>
+    <div id="timer"></div>
+    <div id="score">Score: 0</div>
+    <audio id="audio" src="crash.wav"></audio>
+
+    <script type="text/javascript">
+        var a = ["candy1", "candy2", "candy3", "candy4", "candy5", "candy6", "candy7", "candy8", "candy9", "candy10", "candy11", "candy12"];
+        var images = [];
+        var score = 0;
+
+        function handleImageClick(event) {
+            // 타이머가 종료되었을 때만 클릭 이벤트 처리
+            if (secondsLeft > 0) {
+                 event.target.style.display = "none";
+                // event.target.src = "boom.gif";
+                // event.target.animation = "fade 1s";
+                // event.target.onanimationend = function(){
+                //     this.remove();
+                // }
+                if (images.every(img => img.style.display === "none")) {
+                    images.forEach(img => img.style.display = "block");
+                }
+
+                // 클릭할 때마다 점수 증가
+                score++;
+                document.getElementById("score").textContent = "Score: " + score;
+            }
+        }
+
+        for (var i = 0; i < 45; i++) {
+            var t = document.createElement("img");
+            t.src = a[randomBH(0, 11)] + ".png";
+            t.className = "candy";
+            t.style.width = randomBH(80, 400) + "px";
+            t.style.height = "auto";
+            t.style.left = Math.random() * screen.availWidth + "px";
+            t.style.top = Math.random() * screen.availHeight + "px";
+
+            t.addEventListener("click", handleImageClick);
+
+            document.body.appendChild(t);
+            images.push(t);
+        }
+
+        function randomBH(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        document.body.onclick = function play() {
+            var audio = document.getElementById("audio");
+            audio.play();
+        }
+
+        var poet = "Click Candies to Crush!";
+        var poetArr = poet.split(" ");
+
+        var myTimer = setInterval(print, 400);
+        var s = 0;
+
+        function print() {
+            var t = document.createElement("span");
+            t.innerHTML = poetArr[s] + " ";
+            t.className = "word";
+            s++;
+            poetText.appendChild(t);
+            if (s == poetArr.length) {
+                clearInterval(myTimer);
+            }
+        }
+
+        // 타이머 추가
+        var timerElement = document.getElementById("timer");
+        var secondsLeft = 15;
+        var timerInterval = setInterval(function() {
+            timerElement.textContent = "Time: " + secondsLeft + " sec";
+            secondsLeft--;
+            if (secondsLeft < 0) {
+                clearInterval(timerInterval);
+                timerElement.textContent = "Game Over!";
+                displayPopup(); // 시간 종료 시 팝업 표시
+
+            }
+        }, 1000);
+
+        // 이미지 팝업 표시 함수
+        function displayPopup() {
+            var popup = document.createElement("div");
+            popup.style.position = "fixed";
+            popup.style.top = "50%";
+            popup.style.left = "50%";
+            popup.style.transform = "translate(-50%, -50%)";
+            popup.style.backgroundColor = "white";
+            popup.style.backgroundImage = "url('popbg.jpg')"; // 이미지 파일 경로를 여기에 추가
+            popup.style.backgroundSize = "cover"; // 이미지를 창에 맞추기 위해 설정
+            popup.style.border = "2px solid black";
+            popup.style.width = "65%";
+            popup.style.height = "65%";
+            popup.style.padding = "20px";
+
+        // 텍스트를 가운데 정렬하는 <div> 요소 추가
+            var textContainer = document.createElement("div");
+            textContainer.style.textAlign = "center"; // 가운데 정렬
+            textContainer.style.margin = "90px auto 0";
+            textContainer.style.width = "80%"; // 텍스트 컨테이너의 너비 설정
+            textContainer.style.position = "relative";
+            textContainer.style.top = "50%";
+            textContainer.style.transform = "translateY(-50%)";
+            textContainer.style.color = "white";
+            textContainer.style.fontSize = "1.3rem";
+            textContainer.style.lineHeight = "2rem";
+
+            // 텍스트 내용 추가
+            var scoreText = "당신은 지금 사탕 " + score + "개, 총 " + (score * 9) + "g의 당류를 섭취했습니다.";
+            textContainer.innerHTML = "<h3>" + scoreText + "</h3>" + "<p>일일 당류 섭취 상한선은 50g으로 , <br> 이를 초과했다면 단맛 중독 자가진단과 해결방법을 알아보세요.</p>";
+
+            // 버튼 추가
+            var nextButton = document.createElement("button");
+            nextButton.textContent = "Go";
+            nextButton.style.backgroundColor = "#FF00B7";
+            nextButton.style.color = "white";
+            nextButton.style.border = "none";
+            nextButton.style.borderRadius = "40px";
+            nextButton.style.padding = "30px 30px";
+            nextButton.style.fontSize = "20px";
+            nextButton.style.marginTop = "20px";
+            nextButton.style.cursor = "pointer";
+            // 버튼을 클릭하면 다음 페이지로 이동하도록 설정
+            nextButton.addEventListener("click", function() {
+                window.location.href = "end.html"; 
+            });
+
+             textContainer.appendChild(nextButton);
+
+            
+            popup.appendChild(textContainer);
+            document.body.appendChild(popup);
+        }
+
+    </script>
+</body>
+</html>

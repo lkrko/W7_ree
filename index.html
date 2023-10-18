@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+
+	<style type="text/css">
+		@font-face {
+            font-family: 'CWDangamAsac-Bold';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/CWDangamAsac-Bold.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .title{
+            max-width: 45%; /* 이미지가 화면 크기에 맞게 스케일링 */
+            max-height: 45%; /* 이미지가 화면 크기에 맞게 스케일링 */
+            margin-top: 60px;
+            animation: zoomIn 1s; /* 애니메이션 적용 */
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.1); /* 시작 시 크기 0.1배 */
+                opacity: 0; /* 시작 시 투명도 0 */
+            }
+            to {
+                transform: scale(1); /* 끝 시 원래 크기 */
+                opacity: 1; /* 끝 시 투명도 1 */
+            }
+        }
+
+        .button {
+            background-color: #FF00B7;
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.4rem;
+            margin-top: 30px;
+            cursor: pointer;
+            align-self: center;
+        }
+
+        .button:hover {
+            background-color: #fff;
+            color: black;
+        }
+      
+
+	</style>
+</head>
+<body>
+	<img class="title" src="title.png" alt="Centered Image">
+	<button class="button" onclick="location.href='main.html'">Play</button>
+
+
+
+
+</body>
+</html>
